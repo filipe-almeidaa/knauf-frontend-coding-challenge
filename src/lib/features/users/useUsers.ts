@@ -13,11 +13,13 @@ const useUsers = () => {
 
   const usersList = useAppSelector((state) => state.users.usersList);
   const usersLoading = useAppSelector((state) => state.users.usersLoading);
+  const usersError = useAppSelector((state) => state.users.usersError);
 
   return {
     getUsersList,
     usersList,
     usersLoading,
+    usersError,
   };
 };
 

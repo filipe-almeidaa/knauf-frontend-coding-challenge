@@ -1,5 +1,4 @@
-'use client';
-import useUsers from '@/lib/features/users/useUsers';
+import { UserModel } from '@/models/user.model';
 import { Box } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import Paper from '@mui/material/Paper';
@@ -9,18 +8,30 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useEffect } from 'react';
+import { PropsWithChildren } from 'react';
 
-export default function UsersList() {
-  const { getUsersList, usersList, usersLoading } = useUsers();
+type UsersTableProps = {
+  list: UserModel[] | null;
+  isLoading: boolean;
+  error: string | null;
+};
 
-  useEffect(() => {
-    getUsersList({});
-  }, []);
+function CenteredTableCell({ children }: PropsWithChildren) {
+  return (
+    <TableRow>
+      <TableCell colSpan={4}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, p: 3 }}>
+          {children}
+        </Box>
+      </TableCell>
+    </TableRow>
+  );
+}
 
+export default function UsersTable({ list, isLoading, error }: UsersTableProps) {
   let tableContent = null;
-  if (usersList && usersList.length > 0) {
-    tableContent = usersList.map((row) => (
+  if (list && list.length > 0) {
+    tableContent = list.map((row) => (
       <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
         <TableCell component="th" scope="row">
           {row.id}
@@ -30,20 +41,24 @@ export default function UsersList() {
         <TableCell>{row.phone}</TableCell>
       </TableRow>
     ));
-  } else if (usersLoading) {
+  } else if (list?.length === 0) {
     tableContent = (
-      <TableRow>
-        <TableCell colSpan={4}>
-          <Box
-            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, p: 3 }}
-          >
-            <CircularProgress />
-          </Box>
-        </TableCell>
-      </TableRow>
+      <CenteredTableCell>
+        <p>No results.</p>
+      </CenteredTableCell>
     );
-  } else if (usersList && usersList.length) {
-    tableContent = <p>No results.</p>;
+  } else if (isLoading) {
+    tableContent = (
+      <CenteredTableCell>
+        <CircularProgress />
+      </CenteredTableCell>
+    );
+  } else if (error) {
+    tableContent = (
+      <CenteredTableCell>
+        <p>{error}</p>
+      </CenteredTableCell>
+    );
   }
 
   return (

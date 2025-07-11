@@ -1,9 +1,9 @@
 'use client';
 import { AppStore, makeStore } from '@/lib/store';
-import { ReactNode, useRef } from 'react';
+import { PropsWithChildren, useRef } from 'react';
 import { Provider } from 'react-redux';
 
-export default function StoreProvider({ children }: { children: ReactNode }) {
+export default function StoreProvider({ children }: PropsWithChildren) {
   const storeRef = useRef<AppStore>(undefined);
   if (!storeRef.current) {
     storeRef.current = makeStore();

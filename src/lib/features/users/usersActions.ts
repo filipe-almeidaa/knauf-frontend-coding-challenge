@@ -13,7 +13,8 @@ export const getUsersListAction = createAsyncThunk<
     const response: Response = await fetch(`/api/users?${searchParams}`);
     return await response.json();
   } catch (error) {
-    console.warn('Error fetching the users list', error);
-    return rejectWithValue('Error');
+    const message: string = 'Error fetching the users list';
+    console.warn(message, error);
+    return rejectWithValue(message);
   }
 });

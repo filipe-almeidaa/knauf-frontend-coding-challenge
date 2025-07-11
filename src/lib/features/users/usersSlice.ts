@@ -29,6 +29,7 @@ export const usersSlice = createSlice({
         state.usersLoading = false;
       })
       .addCase(getUsersListAction.rejected, (state, action) => {
+        state.usersList = null;
         state.usersLoading = false;
         state.usersError = action.payload ?? null;
       });
