@@ -14,6 +14,7 @@ type UsersTableProps = {
   list: UserModel[] | null;
   isLoading: boolean;
   error: string | null;
+  onRowClick: (user: UserModel) => void;
 };
 
 function CenteredTableCell({ children }: PropsWithChildren) {
@@ -28,17 +29,22 @@ function CenteredTableCell({ children }: PropsWithChildren) {
   );
 }
 
-export default function UsersTable({ list, isLoading, error }: UsersTableProps) {
+export default function UsersTable({ list, isLoading, error, onRowClick }: UsersTableProps) {
   let tableContent = null;
   if (list && list.length > 0) {
-    tableContent = list.map((row) => (
-      <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    tableContent = list.map((rowUser) => (
+      <TableRow
+        key={rowUser.id}
+        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+        onClick={() => onRowClick(rowUser)}
+        className="cursor-pointer"
+      >
         <TableCell component="th" scope="row">
-          {row.id}
+          {rowUser.id}
         </TableCell>
-        <TableCell>{row.name}</TableCell>
-        <TableCell>{row.email}</TableCell>
-        <TableCell>{row.phone}</TableCell>
+        <TableCell>{rowUser.name}</TableCell>
+        <TableCell>{rowUser.email}</TableCell>
+        <TableCell>{rowUser.phone}</TableCell>
       </TableRow>
     ));
   } else if (list?.length === 0) {

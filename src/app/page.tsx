@@ -1,5 +1,6 @@
 'use client';
 import SearchInput from '@/app/components/SearchInput';
+import UserDetails from '@/app/components/UserDetails';
 import UsersTable from '@/app/components/UsersTable';
 import useUsers from '@/lib/features/users/useUsers';
 import Container from '@mui/material/Container';
@@ -11,7 +12,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, useCallback, useEffect } from 'react';
 
 export default function Home() {
-  const { getUsersList, usersList, usersLoading, usersError } = useUsers();
+  const {
+    getUsersList,
+    selectUser,
+    clearSelectedUser,
+    usersList,
+    usersLoading,
+    usersError,
+    selectedUser,
+  } = useUsers();
   const router = useRouter();
   const searchParams = useSearchParams();
   const nameSearchParam = searchParams.get('name') ?? '';
@@ -27,12 +36,15 @@ export default function Home() {
     [router],
   );
 
-  const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value.trim();
-    const searchParams: URLSearchParams = new URLSearchParams({ name: inputValue });
+  const handleSearchInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const inputValue = event.target.value.trim();
+      const searchParams: URLSearchParams = new URLSearchParams({ name: inputValue });
 
-    setSearchParamsDebounced(searchParams);
-  };
+      setSearchParamsDebounced(searchParams);
+    },
+    [setSearchParamsDebounced],
+  );
 
   useEffect(() => {
     getUsersList({
@@ -53,7 +65,15 @@ export default function Home() {
                 defaultValue={nameSearchParam}
                 onChangeHandler={handleSearchInputChange}
               />
-              <UsersTable list={usersList} isLoading={usersLoading} error={usersError} />
+              <UsersTable
+                list={usersList}
+                isLoading={usersLoading}
+                error={usersError}
+                onRowClick={selectUser}
+              />
+              {selectedUser ? (
+                <UserDetails user={selectedUser} onCloseClick={clearSelectedUser} />
+              ) : null}
             </Stack>
           </Paper>
         </Container>
