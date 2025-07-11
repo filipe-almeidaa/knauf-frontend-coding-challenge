@@ -10,10 +10,16 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript', 'plugin:prettier/recommended'),
+  ...compat.extends(
+    'next/core-web-vitals',
+    'next/typescript',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+  ),
   {
     rules: {
       quotes: ['error', 'single'],
+      'react/react-in-jsx-scope': 'off',
     },
   },
 ];

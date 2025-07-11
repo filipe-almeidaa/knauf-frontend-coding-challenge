@@ -1,17 +1,14 @@
-import type { Metadata } from 'next';
-import { ReactNode } from 'react';
-import { Geist, Geist_Mono } from 'next/font/google';
-import '@/app/globals.css';
 import Providers from '@/app/providers/Providers';
+import type { Metadata } from 'next';
+import { Roboto } from 'next/font/google';
+import '@/app/globals.css';
+import { ReactNode } from 'react';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto',
 });
 
 export const metadata: Metadata = {
@@ -26,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${roboto.variable}`}>
         <Providers>{children}</Providers>
       </body>
     </html>
