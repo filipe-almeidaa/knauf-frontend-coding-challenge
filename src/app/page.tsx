@@ -8,7 +8,8 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import debounce from '@mui/utils/debounce';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, useCallback, useEffect } from 'react';
 
 export default function Home() {
@@ -21,11 +22,11 @@ export default function Home() {
     usersError,
     selectedUser,
   } = useUsers();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const nameSearchParam = searchParams.get('name') ?? '';
+  const router: AppRouterInstance = useRouter();
+  const searchParams: ReadonlyURLSearchParams = useSearchParams();
+  const nameSearchParam: string = searchParams.get('name') ?? '';
 
-  const setSearchParamsDebounced = useCallback(
+  const setSearchParamsDebounced: (params: URLSearchParams) => void = useCallback(
     debounce((params: URLSearchParams) => {
       if (params.get('name')?.length) {
         router.replace(`?${params.toString()}`);
@@ -38,7 +39,7 @@ export default function Home() {
 
   const handleSearchInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      const inputValue = event.target.value.trim();
+      const inputValue: string = event.target.value.trim();
       const searchParams: URLSearchParams = new URLSearchParams({ name: inputValue });
 
       setSearchParamsDebounced(searchParams);
@@ -50,7 +51,7 @@ export default function Home() {
     getUsersList({
       name: nameSearchParam,
     });
-  }, [nameSearchParam]);
+  }, [nameSearchParam, getUsersList]);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

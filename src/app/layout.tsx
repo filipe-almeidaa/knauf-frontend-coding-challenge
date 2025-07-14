@@ -2,7 +2,7 @@ import Providers from '@/app/providers/Providers';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import '@/app/globals.css';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -24,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.variable}`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        </Providers>
       </body>
     </html>
   );
